@@ -63,15 +63,16 @@ module uart_rx (
           rx_pack <= {rx,rx_pack[8:1]};// serial in rx bit and shift the data
           //rx_pack    <= rx_pack>>1;
           cnt        <= cnt+1;
-          if(cnt==8)
+          if(cnt==7) // jumped on 7 as form 0 to 7 we sample data_in bits as cnt is increase after sample data bit 
+                     //So when cnt turn 7 we already had bit on index 7 i.e 8th data bit ,as counter is incr after sampling 
             cur_state <= CHK_SUM;
         end
       CHK_SUM :
         begin
-          parity_bit<= rx_pack[8:1];//8bit of data as mbs of rx_pack updated in that cycle and last bit is not shifted
-          if(rx == ^rx_pack[8:1])// checking if parity bit matches if matches data_out is assing to rx_pack[7:0] that carries 8 bit data byte
+          parity_bit<= ^rx_pack[8:1];//8bit of data as mbs of rx_pack updated in that cycle and last bit is not shifted
+          if((rx === (^rx_pack[8:1])))// checking if parity bit matches if matches data_out is assing to rx_pack[7:0] that carries 8 bit data byte
             begin
-              data_out <= rx_pack[7:0];
+              data_out <= rx_pack[8:1];//first initial 8:1 bit of rx_pack carries data in
             end
           else
               data_out <= 'x;
