@@ -9,6 +9,9 @@ parameter BAUD_RATE=2400;
 	logic [7:0] data_out;
 
 
+always #1 clk=~clk;
+
+
 
 UART_top #(.BAUD_RATE(BAUD_RATE)) i_UART_top (
 	.clk     (clk     ),
@@ -19,5 +22,18 @@ UART_top #(.BAUD_RATE(BAUD_RATE)) i_UART_top (
 );
 
 
+
+initial begin
+srst = 0 ;
+repeat(100) @(posedge clk);
+start = 1;
+data_in = 'hff;
+
+wait(i_UART_top.end_tx);
+@(posedge i_UART_top.clk_t);
+repeat(10) @(posedge clk);
+
+$stop();
+end
 
 endmodule : tb_UART_top

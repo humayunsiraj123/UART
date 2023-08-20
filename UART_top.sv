@@ -17,7 +17,7 @@ module UART_top #(parameter BAUD_RATE=2400) (
     .clk_t(clk_t)
   );
 
-
+logic end_tx;
 
   
   uart_tx i_uart_tx (
@@ -29,6 +29,7 @@ module UART_top #(parameter BAUD_RATE=2400) (
     .busy   (busy   )
   );
 
+assign end_tx = i_uart_tx.end_tx;// sigonly use for tb;
 
 
 endmodule : UART_top

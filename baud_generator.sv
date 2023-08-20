@@ -2,7 +2,7 @@
 module baud_generator #(parameter BAUD_RATE=2400) (
 	input  clk ,
 	input  srst,
-	output clk_t
+	output  logic clk_t
 );
 
 	parameter FREQ = 1000000; //1Mhz;
@@ -17,7 +17,7 @@ module baud_generator #(parameter BAUD_RATE=2400) (
 			count <= 0;
 		else 
 			count <= count + 1  ;
-		end
+		
 	end
 
 
